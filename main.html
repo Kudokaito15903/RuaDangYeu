@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rùa Con Bơi Trên Mặt Nước 🐢</title>
+<style>
+  :root{
+    --water-deep:#1f5f52;
+    --water-mid:#2f8a74;
+    --water-light:#5cb99b;
+    --water-glow:#a9e6c9;
+    --shell-green:#5b8c5a;
+    --shell-mid:#6ea369;
+    --shell-light:#7fb56a;
+    --shell-line:#2d4e2e;
+    --skin:#9fd38a;
+    --skin-light:#a8dd91;
+    --blush:#ffb3ab;
+    --cream:#fffaf0;
+    --ink:#1c3a2e;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg,#e8f6ee,#cdeedd);
+    overflow:hidden;
+  }
+
+  .stage{
+    position:relative;
+    width:min(92vw, 640px);
+    height:min(92vw, 640px);
+    border-radius: 36px;
+    box-shadow: 0 30px 60px rgba(19,58,44,0.35), 0 0 0 8px rgba(255,255,255,0.5) inset;
+    overflow:hidden;
+    background: var(--water-mid);
+  }
+
+  /* ---------- Mặt nước ---------- */
+  .water{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, var(--water-glow) 0%, transparent 40%),
+      radial-gradient(circle at 75% 70%, var(--water-light) 0%, transparent 45%),
+      linear-gradient(160deg, var(--water-light) 0%, var(--water-mid) 55%, var(--water-deep) 100%);
+  }
+
+  /* vân sóng lăn tăn khắp mặt nước */
+  .texture{
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 2px, transparent 2px, transparent 26px),
+      repeating-linear-gradient(65deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 34px);
+    animation: textureMove 9s linear infinite;
+    mix-blend-mode: overlay;
+    pointer-events:none;
+  }
+  @keyframes textureMove{
+    0%{ background-position: 0 0, 0 0; }
+    100%{ background-position: 60px 40px, -50px 30px; }
+  }
+
+  /* các đốm nắng lấp lánh trên mặt nước */
+  .glint{
+    position:absolute;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0) 70%);
+    animation: shimmer 3s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes shimmer{
+    0%,100%{ opacity:0.15; transform: scale(0.8); }
+    50%{ opacity:0.7; transform: scale(1.15); }
+  }
+
+  .lilypad{
+    position:absolute;
+    width:64px; height:24px;
+    background: radial-gradient(ellipse at 50% 45%, #6ec38b, #2f7a52);
+    border-radius:50%;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.18);
+    animation: bob 5s ease-in-out infinite;
+    z-index:2;
+  }
+  .lilypad::after{
+    content:"";
+    position:absolute;
+    left:50%; top:46%;
+    width:6px; height:12px;
+    background: #2f7a52;
+    transform: translate(-50%,-50%) rotate(20deg);
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-4px) rotate(3deg); }
+  }
+
+  /* ---------- Gợn sóng lan tỏa theo rùa ---------- */
+  .ripple-ring{
+    position:absolute;
+    border-radius:50%;
+    border: 2px solid rgba(255,255,255,0.55);
+    pointer-events:none;
+    transform: translate(-50%,-50%) scale(0.2);
+    animation: ringOut 1.8s ease-out forwards;
+    z-index:3;
+  }
+  @keyframes ringOut{
+    0%{ width:10px; height:5px; opacity:0.7; transform: translate(-50%,-50%) scale(0.3); }
+    100%{ width:90px; height:40px; opacity:0; transform: translate(-50%,-50%) scale(1); }
+  }
+
+  /* ---------- Rùa bơi ---------- */
+  .turtle-wrap{
+    position:absolute;
+    left:50%; top:50%;
+    width:150px;
+    cursor:pointer;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.25));
+    z-index:4;
+    will-change: transform;
+  }
+
+  .turtle-bob{
+    animation: microBob 1.8s ease-in-out infinite;
+  }
+  @keyframes microBob{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-3px) rotate(1.5deg); }
+  }
+
+  .leg{
+    transform-origin: top center;
+    animation: paddle 1s ease-in-out infinite;
+  }
+  .leg.fl{ animation-delay: 0s; }
+  .leg.fr{ animation-delay: 0.5s; }
+  .leg.bl{ animation-delay: 0.25s; }
+  .leg.br{ animation-delay: 0.75s; }
+  @keyframes paddle{
+    0%,100%{ transform: rotate(-20deg); }
+    50%{ transform: rotate(20deg); }
+  }
+
+  .head-wrap{
+    transform-origin: 84% 60%;
+    animation: nod 2s ease-in-out infinite;
+  }
+  @keyframes nod{
+    0%,100%{ transform: rotate(0deg); }
+    50%{ transform: rotate(-4deg); }
+  }
+
+  .blink{ animation: blink 4.5s infinite; transform-origin: center; }
+  @keyframes blink{
+    0%, 92%, 100%{ transform: scaleY(1); }
+    95%{ transform: scaleY(0.1); }
+  }
+
+  .caption{
+    position:absolute;
+    left:50%; bottom:4%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.88);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight:bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    user-select:none;
+    z-index:5;
+  }
+
+  .heart{
+    position:absolute;
+    font-size: 20px;
+    opacity:0;
+    pointer-events:none;
+    animation: popHeart 1s ease-out forwards;
+    z-index:6;
+  }
+  @keyframes popHeart{
+    0%{ opacity:1; transform: translateY(0) scale(0.6); }
+    100%{ opacity:0; transform: translateY(-70px) scale(1.2); }
+  }
+
+  .title{
+    position:absolute;
+    top: 4%;
+    left:50%;
+    transform: translateX(-50%);
+    color: var(--cream);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    user-select:none;
+    z-index:5;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="water"></div>
+  <div class="texture"></div>
+
+  <div class="glint" style="width:50px;height:16px; top:15%; left:20%; animation-delay:0s;"></div>
+  <div class="glint" style="width:34px;height:12px; top:30%; left:70%; animation-delay:0.8s;"></div>
+  <div class="glint" style="width:44px;height:14px; top:65%; left:35%; animation-delay:1.6s;"></div>
+  <div class="glint" style="width:28px;height:10px; top:75%; left:80%; animation-delay:2.2s;"></div>
+
+  <div class="lilypad" style="left:10%; top:14%; transform:scale(0.9);"></div>
+  <div class="lilypad" style="right:8%; top:60%; transform:scale(1.1);"></div>
+  <div class="lilypad" style="left:75%; top:18%; transform:scale(0.7);"></div>
+  <div class="lilypad" style="left:14%; top:78%; transform:scale(0.8);"></div>
+
+  <div class="title">Dành tặng Ninh Trang 💚</div>
+
+  <div class="turtle-wrap" id="turtle">
+    <div class="turtle-bob">
+    <svg viewBox="0 0 260 200" width="150" height="115">
+      <!-- back legs -->
+      <g class="leg bl">
+        <ellipse cx="70" cy="150" rx="16" ry="11" fill="#7fb56a"/>
+      </g>
+      <g class="leg br">
+        <ellipse cx="190" cy="150" rx="16" ry="11" fill="#7fb56a"/>
+      </g>
+
+      <!-- front legs -->
+      <g class="leg fl">
+        <ellipse cx="80" cy="120" rx="17" ry="12" fill="#9fd38a"/>
+      </g>
+      <g class="leg fr">
+        <ellipse cx="200" cy="118" rx="18" ry="13" fill="#9fd38a"/>
+      </g>
+
+      <!-- tail -->
+      <path d="M60 140 Q40 145 45 158 Q55 152 62 145 Z" fill="#9fd38a"/>
+
+      <!-- shell -->
+      <g>
+        <ellipse cx="135" cy="120" rx="90" ry="62" fill="#5b8c5a"/>
+        <ellipse cx="135" cy="118" rx="80" ry="54" fill="#6ea369"/>
+        <g fill="none" stroke="#3f6b40" stroke-width="3" stroke-linejoin="round">
+          <polygon points="135,78 158,96 150,120 120,120 112,96" fill="#7fb56a"/>
+          <polygon points="90,100 112,96 120,120 100,138 78,122" fill="#6ea369"/>
+          <polygon points="180,100 158,96 150,120 170,138 192,122" fill="#6ea369"/>
+          <polygon points="100,138 120,120 150,120 170,138 155,158 115,158" fill="#5f9a5d"/>
+          <polygon points="78,122 100,138 90,160 65,148" fill="#5b8c5a"/>
+          <polygon points="192,122 170,138 180,160 205,148" fill="#5b8c5a"/>
+        </g>
+        <ellipse cx="135" cy="120" rx="90" ry="62" fill="none" stroke="#2d4e2e" stroke-width="4"/>
+      </g>
+
+      <!-- head group -->
+      <g class="head-wrap">
+        <path d="M195 100 Q225 95 232 118 Q235 132 220 138 Q205 132 200 118 Z" fill="#9fd38a"/>
+        <ellipse cx="228" cy="108" rx="26" ry="22" fill="#a8dd91"/>
+        <ellipse cx="215" cy="118" rx="6" ry="4" fill="#ffb3ab" opacity="0.8"/>
+        <ellipse cx="238" cy="120" rx="5" ry="3.5" fill="#ffb3ab" opacity="0.7"/>
+        <g class="blink">
+          <circle cx="220" cy="100" r="5.5" fill="#274035"/>
+          <circle cx="222" cy="98" r="1.6" fill="#fff"/>
+          <circle cx="238" cy="99" r="5.5" fill="#274035"/>
+          <circle cx="240" cy="97" r="1.6" fill="#fff"/>
+        </g>
+        <path d="M215 114 Q228 122 242 112" fill="none" stroke="#274035" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+    </svg>
+    </div>
+  </div>
+
+  <div class="caption">Rùa con đang bơi tung tăng~</div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const turtle = document.getElementById('turtle');
+  const captionEl = document.querySelector('.caption');
+  const captions = [
+    "Rùa con đang bơi tung tăng~",
+    "Ninh Trang ơi, rùa nhớ bạn ghê!",
+    "Chậm mà chắc nha! 🐢",
+    "Nước mát quá à~",
+    "Nè, chạm nữa đi mà!"
+  ];
+  let idx = 0;
+
+  // ---- Đường bơi hình số 8 mềm mại trên mặt nước ----
+  let t = 0;
+  let lastX = 50, lastY = 50;
+  let rippleTimer = 0;
+
+  function frame(){
+    t += 0.012;
+
+    // toạ độ phần trăm trong stage (tránh sát viền)
+    const x = 50 + 30 * Math.sin(t);
+    const y = 50 + 20 * Math.sin(t * 2) * 0.9;
+
+    // hướng bơi để xoay đầu rùa theo chiều di chuyển
+    const dx = x - lastX;
+    const dy = y - lastY;
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+    turtle.style.left = x + '%';
+    turtle.style.top = y + '%';
+    turtle.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
+
+    lastX = x; lastY = y;
+
+    // tạo gợn sóng phía sau rùa định kỳ
+    rippleTimer++;
+    if (rippleTimer % 22 === 0) {
+      spawnRipple(x, y, angle);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  function spawnRipple(xPercent, yPercent, angle){
+    const stageRect = stage.getBoundingClientRect();
+    const ring = document.createElement('div');
+    ring.className = 'ripple-ring';
+    // đặt ngay phía sau đuôi rùa (ngược hướng bơi một chút)
+    const rad = (angle + 180) * Math.PI / 180;
+    const offsetX = Math.cos(rad) * 3;
+    const offsetY = Math.sin(rad) * 3;
+    ring.style.left = (xPercent + offsetX) + '%';
+    ring.style.top = (yPercent + offsetY) + '%';
+    ring.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
+    stage.appendChild(ring);
+    setTimeout(() => ring.remove(), 1900);
+  }
+
+  requestAnimationFrame(frame);
+
+  // ---- Tương tác chạm vào rùa ----
+  turtle.addEventListener('click', () => {
+    const rect = turtle.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    for (let i = 0; i < 3; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = ['💚','✨','💕'][i % 3];
+      const hx = (rect.left - stageRect.left) + rect.width/2 + (Math.random()*50-25);
+      const hy = (rect.top - stageRect.top) + rect.height/3;
+      heart.style.left = hx + 'px';
+      heart.style.top = hy + 'px';
+      heart.style.animationDelay = (i*0.1) + 's';
+      stage.appendChild(heart);
+      setTimeout(() => heart.remove(), 1100);
+    }
+
+    idx = (idx + 1) % captions.length;
+    captionEl.textContent = captions[idx];
+  });
+</script>
+
+</body>
+</html>
